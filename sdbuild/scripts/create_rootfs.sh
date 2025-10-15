@@ -48,15 +48,23 @@ apt-get clean
 
 rm -f /boot/*
 
-# Create the Xilinx User
-adduser --home /home/xilinx xilinx --disabled-password --gecos "Xilinx User,,,,"
+# Create the STAR User
+adduser --home /home/star star --disabled-password --gecos "STAR Robot User,,,,"
 
-echo -e "xilinx\\nxilinx" | passwd xilinx
-echo -e "xilinx\\nxilinx" | smbpasswd -a xilinx
-echo -e "xilinx\\nxilinx" | passwd root
+echo -e "star\\nstar" | passwd star
+echo -e "star\\nstar" | passwd root
 
-adduser xilinx adm
-adduser xilinx sudo
+adduser star adm
+adduser star sudo
+
+# Configure locales to only use en_US.UTF-8
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+locale-gen en_US.UTF-8
+update-locale LANG=en_US.UTF-8
+
+# Remove unnecessary locale files (saves ~50-100MB)
+find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en' ! -name 'en_US' -type d -exec rm -rf {} + 2>/dev/null || true
+find /usr/share/i18n/locales -mindepth 1 -maxdepth 1 ! -name 'en_US' ! -name 'en_GB' ! -name 'POSIX' -type f -delete 2>/dev/null || true
 
 fake-hwclock save
 
