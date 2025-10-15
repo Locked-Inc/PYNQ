@@ -403,11 +403,11 @@ endif
 endif
 
 	vivado -version | fgrep ${KERNEL_VERSION}
-	vitis -version | fgrep ${KERNEL_VERSION}
+	# vitis -version | fgrep ${KERNEL_VERSION}  # Not needed for Zynq-7000 boards
 	which petalinux-config
-	which arm-linux-gnueabihf-gcc
-	which microblaze-xilinx-elf-gcc
-	which ct-ng
+	# which arm-linux-gnueabihf-gcc  # PetaLinux provides its own toolchains
+	# which microblaze-xilinx-elf-gcc  # PetaLinux provides its own toolchains
+	# which ct-ng  # Not needed with PetaLinux
 	bash $(SCRIPT_DIR)/check_env.sh
 
 boot_files: checkenv $(BOOT_FILES)
