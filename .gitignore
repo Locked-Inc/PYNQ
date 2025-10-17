@@ -42,6 +42,7 @@ tests/*.out
 # Python cache files
 ######################
 __pycache__/
+.cache
 
 # Customized Makefile/project overrides
 ######################
