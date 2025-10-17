@@ -13,13 +13,20 @@ export BOARD=${PYNQ_BOARD}
 cd /home/xilinx
 mkdir -p jupyter_notebooks
 
+# Configure pip cache options if available
+PIP_CACHE_OPTS=""
+if [ -n "$PIP_CACHE_DIR" ] && [ -d "$PIP_CACHE_DIR" ]; then
+    echo "Using pip cache: $PIP_CACHE_DIR"
+    PIP_CACHE_OPTS="--cache-dir $PIP_CACHE_DIR"
+fi
+
 # clone and then install extra packages
-python3 -m pip install --upgrade git+https://github.com/Xilinx/PYNQ-Metadata.git
-python3	-m pip install --upgrade git+https://github.com/Xilinx/PYNQ-Utils.git
+python3 -m pip install $PIP_CACHE_OPTS --upgrade git+https://github.com/Xilinx/PYNQ-Metadata.git
+python3	-m pip install $PIP_CACHE_OPTS --upgrade git+https://github.com/Xilinx/PYNQ-Utils.git
 
 cd pynq_git
 BOARD=${PYNQ_BOARD} PYNQ_JUPYTER_NOTEBOOKS=${PYNQ_JUPYTER_NOTEBOOKS} \
-     python3 -m pip install dist/*.tar.gz --upgrade --no-deps --no-use-pep517
+     python3 -m pip install $PIP_CACHE_OPTS dist/*.tar.gz --upgrade --no-deps --no-use-pep517
 if [ -d notebooks ]; then
      cp -r notebooks/* ${PYNQ_JUPYTER_NOTEBOOKS}/
 fi
