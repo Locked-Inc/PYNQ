@@ -30,9 +30,6 @@ $dry_run sudo -E multistrap -f $multistrap_conf -d $target $multistrap_opt
 # Make sure the that the root is still writable by us
 sudo chroot / chmod a+w $target
 
-# Configure locales to only use en_US.UTF-8 BEFORE dpkg --configure -a runs
-echo "en_US.UTF-8 UTF-8" | sudo tee $target/etc/locale.gen > /dev/null
-
 cat - > $target/postinst1.sh <<EOT
 set -x
 export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
