@@ -14,10 +14,11 @@ cd /home/xilinx
 mkdir -p jupyter_notebooks
 
 # Configure pip cache options if available
-PIP_CACHE_OPTS=""
+# Also increase timeout for slow connections
+PIP_CACHE_OPTS="--timeout=300 --retries=5"
 if [ -n "$PIP_CACHE_DIR" ] && [ -d "$PIP_CACHE_DIR" ]; then
     echo "Using pip cache: $PIP_CACHE_DIR"
-    PIP_CACHE_OPTS="--cache-dir $PIP_CACHE_DIR"
+    PIP_CACHE_OPTS="$PIP_CACHE_OPTS --cache-dir $PIP_CACHE_DIR"
 fi
 
 # clone and then install extra packages

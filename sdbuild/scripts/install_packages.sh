@@ -16,6 +16,20 @@ done
 mkdir -p $target/ccache
 sudo mount -o bind $CCACHEDIR $target/ccache
 
+# Mount pip cache if configured
+if [ -n "$PIP_CACHE_DIR" ] && [ -d "$PIP_CACHE_DIR" ]; then
+  mkdir -p $target/pip-cache
+  sudo mount -o bind $PIP_CACHE_DIR $target/pip-cache
+  export PIP_CACHE_DIR=/pip-cache
+fi
+
+# Mount git cache if configured
+if [ -n "$GIT_CACHE_DIR" ] && [ -d "$GIT_CACHE_DIR" ]; then
+  mkdir -p $target/git-cache
+  sudo mount -o bind $GIT_CACHE_DIR $target/git-cache
+  export GIT_CACHE_DIR=/git-cache
+fi
+
 function unmount_special() {
 
 # Unmount special files
@@ -25,6 +39,18 @@ do
 done
 sudo umount -l $target/ccache
 rmdir $target/ccache || true
+
+# Unmount pip cache if it was mounted
+if mountpoint -q $target/pip-cache 2>/dev/null; then
+  sudo umount -l $target/pip-cache
+  rmdir $target/pip-cache || true
+fi
+
+# Unmount git cache if it was mounted
+if mountpoint -q $target/git-cache 2>/dev/null; then
+  sudo umount -l $target/git-cache
+  rmdir $target/git-cache || true
+fi
 }
 
 trap unmount_special EXIT
